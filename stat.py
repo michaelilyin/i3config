@@ -36,16 +36,6 @@ class Profile(IntervalModule):
 
 
 class Mic(IntervalModule):
-    """
-    Shows memory load
-    .. rubric:: Available formatters
-    * {avail_mem}
-    * {percent_used_mem}
-    * {used_mem}
-    * {total_mem}
-    Requires psutil (from PyPI)
-    """
-
     interval = 1
     format = "🎤 {volume}"
     color = "#FFFFFF"
@@ -66,17 +56,12 @@ class Mic(IntervalModule):
     def run(self):
         stat = subprocess.check_output(["/usr/bin/amixer", "get", "Capture"]).decode("utf-8")
         res = re.search(
-            "Front Left: Capture 46 \[(\d+)%\]\s\[\S+\]\s\[(on|off)\]\s+Front Right: Capture 46 \[(\d+)%\]\s\[\S+\]\s\[(on|off)\]\s+",
+            "Front Left: Capture \d+ \[(\d+)%\]\s\[\S+\]\s\[(on|off)\]\s+Front Right: Capture \d+ \[(\d+)%\]\s\[\S+\]\s\[(on|off)\]\s+",
             stat)
 
         vol = round((int(res.group(1)) + int(res.group(3))) / 2)
         stat = res.group(2) == "on" or res.group(4) == "on"
-        #
-        # if psutil.version_info < (4, 4, 0):
-        #     used = memory_usage.used - memory_usage.cached - memory_usage.buffers
-        # else:
-        #     used = memory_usage.used
-        #
+
         if not stat:
             color = self.alert_color
         elif vol > self.warn_percentage:

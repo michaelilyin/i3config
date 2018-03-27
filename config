@@ -191,10 +191,12 @@ bindsym Mod4+r mode "resize"
 #lock screen
 bindsym Mod4+Control+l exec lock
 
-bindsym Mod4+Control+comma exec --no-startup-id pactl set-sink-volume 0 -10%
-bindsym Mod4+Control+period exec --no-startup-id pactl set-sink-volume 0 +10%
+bindsym Mod4+Control+comma exec --no-startup-id pactl set-sink-volume 0 -5%
+bindsym Mod4+Control+period exec --no-startup-id pactl set-sink-volume 0 +5%
 bindsym Mod4+Control+m exec --no-startup-id pactl set-sink-mute 0 toggle
 bindsym Mod4+Shift+m exec amixer set Capture toggle
+bindsym Mod4+Shift+comma exec amixer set Capture 5%-
+bindsym Mod4+Shift+period exec amixer set Capture 5%+
 
 bindsym Mod4+Tab exec rofi -show window
 
