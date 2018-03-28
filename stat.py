@@ -4,44 +4,14 @@ import getpass
 import subprocess
 import re
 
-
-class Lang(IntervalModule):
-    interval = 1
-
-    def run(self):
-        xset = subprocess.Popen(["xset", "-q"], stdout=subprocess.PIPE)
-        grep = subprocess.Popen(["grep", "LED"], stdin=xset.stdout, stdout=subprocess.PIPE)
-        lang = subprocess.check_output(["awk", "{ print $10 }"], stdin=grep.stdout).rstrip()
-
-        out = lang.decode("utf-8")
-        if out == "00000000":
-            out = "en"
-        elif out == "00001000":
-            out = "ru"
-
-        self.output = {
-            "full_text": out
-        }
-
-
-class Profile(IntervalModule):
-    interval = 300
-
-    def run(self):
-        me = getpass.getuser()
-
-        self.output = {
-            "full_text": me
-        }
-
+me = getpass.getuser()
 
 class Mic(IntervalModule):
     interval = 1
     format = "🎤 {volume}"
     color = "#FFFFFF"
-    warn_color = "#FFFF00"
+    warn_color = "#FF9075"
     alert_color = "#FF0000"
-    warn_percentage = 100
 
     settings = (
         ("format", "format string used for output."),
@@ -64,10 +34,8 @@ class Mic(IntervalModule):
 
         if not stat:
             color = self.alert_color
-        elif vol > self.warn_percentage:
-            color = self.warn_color
         else:
-            color = self.color
+            color = self.warn_color
 
         cdict = {
             "volume": vol,
@@ -84,30 +52,29 @@ status = Status(
     logfile="/var/log/i3pystatus.log"
 )
 
-status.register(Profile)
+status.register("text", text=me)
 
 status.register("clock", format="%a %-d %b %X")
 
-status.register(Lang)
+status.register("xkblayout", format="{symbol}")
 
 status.register("load", format="{avg1} {avg5} {avg15}")
 
-status.register("cpu_usage_graph", format="{usage}% {cpu_graph}")
-# status.register("cpu_usage_bar", bar_type="horizontal")
+status.register("cpu_usage_graph", format="⛋:{usage:2.0f} {cpu_graph}")
 
 status.register("mem_bar", format="{used_mem_bar}", color="#4444FF")
-status.register("swap", format="{percent_used}%")
-status.register("mem", format="{percent_used_mem}%")
+status.register("mem", format="⛃:{percent_used_mem:4.1f}")
 
-status.register("temp", format="🌡 {temp:.0f}°C")
+status.register("temp", format="🌡:{temp:2.0f}")
 
-status.register("network", interface="enp4s0", format_up="🌐 {v4cidr}")
+status.register("network", interface="enp4s0", format_up="🌐:{v4cidr}")
 
-status.register("pulseaudio", format="🎧 {volume}", sink="0")
-status.register(Mic)
+status.register("pulseaudio", format="🎧:{volume}", sink="0")
+status.register(Mic, format = "🎤:{volume}")
 
-status.register("disk", path="/home", format="~ {avail}G")
+status.register("disk", path="/home", format="~{avail:6.2f}")
 
-status.register("disk", path="/", format="/ {avail}G")
+status.register("disk", path="/", format="💾:{avail:6.2f}")
+status.register("uptime", interval=60, format="{days}d {hours}:{mins}")
 
 status.run()
