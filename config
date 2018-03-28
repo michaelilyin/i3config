@@ -220,6 +220,8 @@ assign [class="jetbrains-idea"] $ws5
 
 assign [class="VirtualBox Manager"] $ws6
 
+assign [class="jetbrains-pycharm-ce"] $ws7
+
 assign [class="Slack"] $ws10
 assign [class="Skype"] $ws10
 assign [class="Thunderbird"] $ws10

@@ -9,3 +9,4 @@ res = re.search("Front Left: Capture 46 \[(\d+)%\]\s\[\S+\]\s\[(on|off)\]\s+Fron
 vol = (int(res.group(1)) + int(res.group(3))) / 2
 
 print(vol)
+
