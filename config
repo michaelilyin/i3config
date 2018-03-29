@@ -229,4 +229,4 @@ assign [class="TelegramDesktop"] $ws10
 
 for_window [class="(?i)gnome-calculator"] floating enable
 
-exec feh --bg-scale /home/ilyin/Pictures/wp.png
+exec feh --bg-fill /home/ilyin/Pictures/wp.png

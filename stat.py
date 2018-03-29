@@ -62,7 +62,7 @@ status.register("load", format="{avg1} {avg5} {avg15}")
 
 status.register("cpu_usage_graph", format="⛋:{usage:2.0f} {cpu_graph}")
 
-status.register("mem_bar", format="{used_mem_bar}", color="#4444FF")
+status.register("mem_bar", format="{used_mem_bar}", color="#00FF00")
 status.register("mem", format="⛃:{percent_used_mem:4.1f}")
 
 status.register("temp", format="🌡:{temp:2.0f}")
